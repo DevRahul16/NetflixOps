@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: devrahul16/backend:latest
+        env:
+        - name: TMDB_API_KEY
+          value: 12e7e80b159a05dc535768f4783cecc8
+        ports:
+        - containerPort: 5000
+

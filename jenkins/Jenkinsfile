@@ -1,0 +1,23 @@
+pipeline {
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t devrahul16/frontend:latest -f docker/frontend.Dockerfile .'
+        sh 'docker build -t devrahul16/backend:latest -f docker/backend.Dockerfile .'
+      }
+    }
+    stage('Push') {
+      steps {
+        sh 'docker push devrahul16/frontend:latest'
+        sh 'docker push devrahul16/backend:latest'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'kubectl apply -f k8s/'
+      }
+    }
+  }
+}
+

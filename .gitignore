@@ -1,0 +1,20 @@
+# Terraform
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Jenkins
+jenkins_home/
+
+# Logs
+*.log
+

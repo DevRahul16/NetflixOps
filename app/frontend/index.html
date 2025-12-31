@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NetflixOps</title>
+  <style>
+    body { background:#141414; color:white; font-family:Arial; }
+    h1 { color:red; }
+    .movie { display:inline-block; margin:10px; }
+    img { width:150px; border-radius:5px; }
+  </style>
+</head>
+<body>
+  <h1>NetflixOps 🎬</h1>
+  <div id="movies"></div>
+
+  <script>
+    fetch("/api/movies")
+      .then(res => res.json())
+      .then(data => {
+        data.results.forEach(movie => {
+          document.getElementById("movies").innerHTML += `
+            <div class="movie">
+              <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}">
+              <p>${movie.title}</p>
+            </div>`;
+        });
+      });
+  </script>
+</body>
+</html>
+
