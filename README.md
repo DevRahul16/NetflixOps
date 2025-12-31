@@ -231,6 +231,6 @@ terraform destroy
 
 ## 👤 Author
 
-**Rahul Kumar**  
+**Rahul Hari Kumar**  
 DevOps Engineer  
 GitHub: https://github.com/DevRahul16
