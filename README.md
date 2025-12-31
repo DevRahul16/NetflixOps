@@ -1,178 +1,236 @@
-🎬 NetflixOps – Netflix-Style DevOps Streaming Platform
+# 🎬 NetflixOps – Netflix-Style DevOps Streaming Platform
 
-NetflixOps is a Netflix-style movie streaming platform built to demonstrate real-world DevOps practices including infrastructure automation, CI/CD pipelines, containerization, and Kubernetes orchestration — all cost-optimized using AWS Free Tier.
+> **NetflixOps** is a Netflix-style streaming platform built to demonstrate **real-world DevOps engineering** using **AWS, Linux, Terraform, Ansible, Docker, Kubernetes (k3s), and Jenkins** — fully **cost-optimized on AWS Free Tier**.
 
-This project focuses on DevOps engineering, not UI cloning.
+🔹 Focus: **DevOps automation, CI/CD, and infrastructure**, not UI cloning  
+🔹 Uses **TMDB API** for real movie data  
+🔹 Designed to impress **recruiters & interviewers**
 
-🚀 Project Highlights
+---
 
-End-to-end CI/CD automation
+## 🔗 Quick Navigation
 
-Infrastructure as Code using Terraform
+- Architecture Overview  
+- Tech Stack  
+- Project Structure  
+- Step-by-Step Execution  
+- CI/CD Pipeline Flow  
+- Cost Optimization  
+- Demo Scenarios  
+- Interview Summary  
 
-Configuration management using Ansible
+---
 
-Containerized microservices with Docker
+## 🏗 Architecture Overview
 
-Kubernetes orchestration using lightweight k3s
-
-Jenkins CI/CD pipeline
-
-Real movie data using TMDB API
-
-Fully cost-optimized (free tier) setup
-
-🏗 High-Level Architecture
+```
 Developer
    |
-   |  (Git Push)
+   | git push
    v
 GitHub Repository
    |
-   |  (Webhook)
+   | Jenkins Webhook
    v
-Jenkins CI/CD Pipeline
+Jenkins CI/CD
    |
-   |-- Build Docker Images
-   |-- Push Images to DockerHub
-   |-- Deploy to Kubernetes
+   | Docker Build & Push
+   v
+DockerHub
+   |
+   | kubectl apply
    v
 Kubernetes (k3s)
    |
-   |-- Frontend (Netflix UI)
-   |-- Backend (TMDB API Service)
+   | Frontend + Backend
    v
 User Browser 🎬
+```
 
-🛠 Technologies Used
-Category	Tools
-Cloud	AWS (EC2 – Free Tier)
-OS	Linux (Ubuntu)
-IaC	Terraform
-Config Mgmt	Ansible
-CI/CD	Jenkins
-Containers	Docker
-Orchestration	Kubernetes (k3s)
-API	TMDB API
-Version Control	Git & GitHub
-📁 Project Structure
+---
+
+## 🛠 Tech Stack
+
+| Category | Tools |
+|--------|------|
+| Cloud | AWS (EC2 – Free Tier) |
+| OS | Linux (Ubuntu) |
+| IaC | Terraform |
+| Config Mgmt | Ansible |
+| CI/CD | Jenkins |
+| Containers | Docker |
+| Orchestration | Kubernetes (k3s) |
+| API | TMDB API |
+| SCM | Git & GitHub |
+
+---
+
+## 📁 Project Structure
+
+```
 NetflixOps/
 ├── ansible/
 │   ├── inventory
 │   └── setup.yml
 ├── app/
-│   ├── frontend/
-│   │   └── index.html
+│   ├── frontend/index.html
 │   └── backend/
 │       ├── app.py
 │       └── requirements.txt
 ├── docker/
 │   ├── frontend.Dockerfile
 │   └── backend.Dockerfile
-├── jenkins/
-│   └── Jenkinsfile
+├── jenkins/Jenkinsfile
 ├── k8s/
 │   ├── frontend.yaml
 │   └── backend.yaml
-├── terraform/
-│   └── main.tf
-├── docs/
-│   └── architecture.png
+├── terraform/main.tf
+├── docs/architecture.png
 ├── .gitignore
 └── README.md
+```
 
-⚙️ How the CI/CD Pipeline Works
+---
 
-Developer pushes code to GitHub
+## 🚀 Step-by-Step Execution
 
-Jenkins pipeline is triggered
+### 1️⃣ Clone Repository
 
-Docker images are built
+```bash
+git clone https://github.com/DevRahul16/NetflixOps.git
+cd NetflixOps
+```
 
-Images are pushed to DockerHub
+---
 
-Kubernetes deployments are updated
+### 2️⃣ Provision EC2 using Terraform
 
-Application is live with zero downtime
+```bash
+cd terraform
+terraform init
+terraform plan
+terraform apply
+```
 
-🎥 Application Flow
+---
 
-Frontend displays Netflix-style UI
+### 3️⃣ Configure Server using Ansible
 
-Backend fetches movie data from TMDB API
+```bash
+cd ansible
+ansible-playbook -i inventory setup.yml --become
+```
 
-Movies and posters are dynamically rendered
+---
 
-Kubernetes ensures:
+### 4️⃣ Access Jenkins
 
-Self-healing
+```
+http://<EC2_PUBLIC_IP>:8080
+```
 
-Scalability
+Get admin password:
+```bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
 
-High availability
+---
 
-🔐 Security & Best Practices
+### 5️⃣ DockerHub Login (on EC2)
 
-No credentials committed to Git
+```bash
+docker login
+```
 
-TMDB API key injected via environment variables
+---
 
-Terraform state & providers excluded using .gitignore
+### 6️⃣ Jenkins Pipeline Execution
 
-Passwordless SSH & sudo access
+- Create **Pipeline**
+- Select **Pipeline from SCM**
+- Repo URL:
+```
+https://github.com/DevRahul16/NetflixOps.git
+```
+- Script Path:
+```
+jenkins/Jenkinsfile
+```
 
-Clean separation of concerns
+---
 
-💸 Cost Optimization Strategy
+### 7️⃣ Kubernetes Verification
 
-AWS EC2 Free Tier (t2.micro)
+```bash
+kubectl get pods
+kubectl get svc
+```
 
-Lightweight Kubernetes (k3s instead of EKS)
+Expose frontend:
+```bash
+kubectl expose deployment frontend --type=NodePort --port=80
+```
 
-No NAT Gateway or RDS
+---
 
-Infrastructure destroyed after demo
+### 8️⃣ Access NetflixOps App
 
-DockerHub free public repositories
+```
+http://<EC2_PUBLIC_IP>:<NODE_PORT>
+```
 
-💡 Total cost: ~₹0 if resources are terminated after use
+---
 
-🧪 Demo Scenarios
+## 🔄 CI/CD Pipeline Flow
 
-Push code → Jenkins deploys automatically
+```
+Git Push
+   ↓
+Jenkins Trigger
+   ↓
+Docker Build
+   ↓
+DockerHub Push
+   ↓
+kubectl apply
+   ↓
+Rolling Update
+```
 
-Delete a pod → Kubernetes self-heals
+---
 
-Scale replicas → App stays online
+## 💸 Cost Optimization
 
-TMDB API fetches live movie data
+- EC2 Free Tier
+- k3s instead of EKS
+- No NAT Gateway
+- No RDS
+- DockerHub Free
 
-🧠 What This Project Demonstrates
+Destroy infra after demo:
+```bash
+terraform destroy
+```
 
-✔ Real DevOps workflow
-✔ Production-style automation
-✔ Troubleshooting skills
-✔ Cost-aware architecture
-✔ CI/CD maturity
+---
 
-🏆 Interview Ready Summary
+## 🧪 Demo Scenarios
 
-“I built NetflixOps, a Netflix-style streaming platform using Docker and Kubernetes, automated with Jenkins CI/CD, and provisioned via Terraform and Ansible on AWS Free Tier. The platform supports automated deployments, self-healing and scalable microservices using real TMDB movie data.”
+✔ CI/CD auto deploy  
+✔ Kubernetes self-healing  
+✔ Zero downtime updates  
+✔ Live TMDB API data  
 
-📌 Future Enhancements
+---
 
-Horizontal Pod Autoscaling (HPA)
+## 🧠 Interview Summary
 
-Ingress Controller (NGINX)
+> *NetflixOps is a Netflix-style streaming platform built with Docker, Kubernetes, Jenkins CI/CD, Terraform, and Ansible on AWS Free Tier. It demonstrates automated deployments, self-healing infrastructure, and real-world DevOps practices using TMDB APIs.*
 
-Monitoring (Prometheus & Grafana)
+---
 
-HTTPS with TLS
+## 👤 Author
 
-Multi-environment pipelines (dev / prod)
-
-👤 Author
-
-Rahul Hari Kumar
-DevOps Engineer
+**Rahul Kumar**  
+DevOps Engineer  
 GitHub: https://github.com/DevRahul16
